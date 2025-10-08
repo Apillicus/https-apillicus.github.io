@@ -261,6 +261,7 @@
         .project-content p {
             color: var(--text-secondary);
             margin-bottom: 1rem;
+            line-height: 1.6;
         }
 
         .project-tech {
@@ -292,6 +293,20 @@
 
         .project-link:hover {
             color: var(--accent-hover);
+        }
+
+        /* Highlight badge for featured projects */
+        .featured-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Contact Section */
@@ -400,8 +415,8 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Hi, I'm Your Name</h1>
-                    <h2>Full Stack Developer & Designer</h2>
-                    <p>I build beautiful, functional web experiences that solve real problems. Passionate about clean code and user-centered design.</p>
+                    <h2>Full Stack Developer & Systems Programmer</h2>
+                    <p>I build beautiful, functional experiences and dive deep into systems programming. Passionate about clean code, compiler design, and solving complex problems.</p>
                     <div class="cta-buttons">
                         <a href="#projects" class="btn btn-primary">View My Work</a>
                         <a href="#contact" class="btn btn-secondary">Get In Touch</a>
@@ -419,17 +434,17 @@
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
-                <p>I'm a passionate developer with experience in building web applications from concept to deployment. I love creating intuitive, accessible experiences that make a difference.</p>
+                <p>I'm a passionate developer with experience in both web applications and systems programming. I love creating intuitive experiences while also diving deep into low-level implementation details.</p>
                 <p>When I'm not coding, you can find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.</p>
                 <div class="skills-grid">
+                    <div class="skill-tag">C++</div>
                     <div class="skill-tag">JavaScript</div>
                     <div class="skill-tag">React</div>
                     <div class="skill-tag">Node.js</div>
-                    <div class="skill-tag">HTML/CSS</div>
                     <div class="skill-tag">Python</div>
+                    <div class="skill-tag">Compilers</div>
                     <div class="skill-tag">Git</div>
                     <div class="skill-tag">SQL</div>
-                    <div class="skill-tag">UI/UX</div>
                 </div>
             </div>
         </div>
@@ -440,19 +455,22 @@
         <div class="container">
             <h2 class="section-title">Featured Projects</h2>
             <div class="projects-grid">
+                <!-- Compiler Project -->
                 <div class="project-card">
                     <div class="project-image">🚀</div>
                     <div class="project-content">
-                        <h3>Project One</h3>
-                        <p>A modern web application that helps users manage their tasks efficiently with real-time collaboration features.</p>
+                        <span class="featured-badge">★ Featured</span>
+                        <h3>Custom Language Compiler</h3>
+                        <p>Full-featured compiler implementing lexical analysis, parsing, semantic type checking, and interpretation. Supports advanced features like fold operations, strong static typing, and multiple compilation modes.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">Flex</span>
+                            <span class="tech-tag">Bison</span>
+                            <span class="tech-tag">Type Systems</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link">Live Demo →</a>
-                            <a href="#" class="project-link">GitHub →</a>
+                            <a href="projects/compiler/" class="project-link">Details →</a>
+                            <a href="https://github.com/apillicus/compiler" class="project-link">GitHub →</a>
                         </div>
                     </div>
                 </div>
@@ -460,7 +478,7 @@
                 <div class="project-card">
                     <div class="project-image">💼</div>
                     <div class="project-content">
-                        <h3>Project Two</h3>
+                        <h3>E-Commerce Platform</h3>
                         <p>An e-commerce platform with advanced filtering, user authentication, and secure payment integration.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Next.js</span>
@@ -477,7 +495,7 @@
                 <div class="project-card">
                     <div class="project-image">📱</div>
                     <div class="project-content">
-                        <h3>Project Three</h3>
+                        <h3>Social Platform</h3>
                         <p>A mobile-first social platform for connecting creatives with opportunities and building their portfolios.</p>
                         <div class="project-tech">
                             <span class="tech-tag">React Native</span>
@@ -501,18 +519,18 @@
             <div class="contact-content">
                 <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
                 <div class="contact-links">
-                    <a href="mailto:your.email@example.com" class="contact-btn">
+                    <a href="mailto:christopher.a.thompson131@gmail.com" class="contact-btn">
                         📧 Email Me
                     </a>
-                    <a href="https://github.com/yourusername" class="contact-btn" target="_blank">
+                    <a href="https://github.com/apillicus" class="contact-btn" target="_blank">
                         💻 GitHub
                     </a>
-                    <a href="https://linkedin.com/in/yourusername" class="contact-btn" target="_blank">
+                    <a href="https://linkedin.com/in/cathompson" class="contact-btn" target="_blank">
                         💼 LinkedIn
-                    </a>
+                    <!-- </a>
                     <a href="https://twitter.com/yourusername" class="contact-btn" target="_blank">
                         🐦 Twitter
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -521,7 +539,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Your Name. Built with ❤️ and hosted on GitHub Pages.</p>
+            <p>&copy; 2025 Christopher. Built with ❤️ and hosted on GitHub Pages.</p>
         </div>
     </footer>
 </body>
