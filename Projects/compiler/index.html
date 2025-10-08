@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Custom Language Compiler - Full-featured compiler with lexical analysis, parsing, and type checking">
+    <title>Custom Language Compiler - Christopher Thompson</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151a36;
+            --bg-tertiary: #1a1f3a;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-light: rgba(99, 102, 241, 0.1);
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 1.5rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .project-hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+        }
+
+        .project-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .project-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        .section-header {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Feature Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Architecture Diagram */
+        .architecture-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .pipeline-step {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .pipeline-step h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .arrow {
+            text-align: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        /* Code Examples */
+        .code-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .code-title {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .code-label {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-comment {
+            color: #6b7280;
+        }
+
+        .code-keyword {
+            color: #c084fc;
+        }
+
+        .code-string {
+            color: #34d399;
+        }
+
+        .code-number {
+            color: #fbbf24;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-badge {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: var(--accent);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tech-badge:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Table Styles */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .info-table th,
+        .info-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-table th {
+            background: var(--bg-tertiary);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .info-table td {
+            color: var(--text-secondary);
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* List Styles */
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .feature-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-header {
+                font-size: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-table {
+                font-size: 0.9rem;
+            }
+
+            .info-table th,
+            .info-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <div class="nav-left">
+                <a href="../../index.html" class="back-link">←</a>
+                <div class="logo">Custom Language Compiler</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="project-hero">
+        <div class="container">
+            <h1 class="project-title">Custom Language Compiler</h1>
+            <p class="project-subtitle">A complete compiler implementation featuring lexical analysis, parsing, semantic type checking, and interpretation</p>
+            <div class="project-links">
+                <a href="https://github.com/Apillicus/LanguageCompiler" target="_blank" class="btn btn-primary">View on GitHub</a>
+                <a href="#architecture" class="btn btn-secondary">See Architecture</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Overview</h2>
+            <div class="section-content">
+                <p>This unified compiler processes a custom programming language with strong type checking and supports both interpretation and semantic analysis. The system demonstrates key compiler construction concepts from tokenization through execution.</p>
+                <p>Built as an educational project to understand the internals of programming language implementation, this compiler showcases modern compiler design patterns and best practices in software engineering.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Compiler Phases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8+</div>
+                    <div class="stat-label">Data Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Compilation Modes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Time Complexity</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔤</div>
+                    <h3 class="feature-title">Strong Static Typing</h3>
+                    <p class="feature-description">Type coercion from integer to real with compile-time narrowing detection to prevent data loss</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Multiple Data Types</h3>
+                    <p class="feature-description">Support for integers, reals, characters, and homogeneous lists with comprehensive type validation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-title">Rich Operator Set</h3>
+                    <p class="feature-description">Arithmetic, relational, logical, and bitwise operators with proper precedence handling</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔀</div>
+                    <h3 class="feature-title">Control Flow</h3>
+                    <p class="feature-description">If/elsif/else statements, switch/case expressions, and ternary when operators</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3 class="feature-title">List Operations</h3>
+                    <p class="feature-description">Zero-indexed subscripting and powerful fold left/right operations for functional programming</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔢</div>
+                    <h3 class="feature-title">Number Formats</h3>
+                    <p class="feature-description">Decimal, hexadecimal, and scientific notation support for flexible numeric input</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3 class="feature-title">Type Checking</h3>
+                    <p class="feature-description">Comprehensive validation with narrowing detection and list type consistency checks</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Fast Compilation</h3>
+                    <p class="feature-description">Sub-100ms compilation for typical programs with linear time complexity</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="content-section" id="architecture">
+        <div class="container">
+            <h2 class="section-header">Compiler Architecture</h2>
+            <div class="architecture-box">
+                <div class="pipeline-step">
+                    <h4>Lexical Analyzer (scanner.l)</h4>
+                    <p>Tokenizes source code, recognizing keywords, operators, literals, and identifiers</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="pipeline-step">
+                    <h4>Syntax Analyzer (parser.y)</h4>
+                    <p>Builds parse tree using context-free grammar with proper operator precedence</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="pipeline-step">
+                    <h4>Semantic Analyzer (types.cc)</h4>
+                    <p>Validates types, checks for narrowing, ensures variable declarations, and type consistency</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="pipeline-step">
+                    <h4>Interpreter (types.cc)</h4>
+                    <p>Directly executes type-checked program and produces results</p>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <p>The compiler follows a traditional four-phase architecture, with each phase building upon the work of the previous one. Flex and Bison handle the lexical and syntactic analysis, while custom C++ code implements type checking and interpretation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-badge">C++11</div>
+                <div class="tech-badge">Flex 2.6+</div>
+                <div class="tech-badge">Bison 3.0+</div>
+                <div class="tech-badge">Make</div>
+                <div class="tech-badge">G++</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Features -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Language Specification</h2>
+            
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Data Types</h3>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Example</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>integer</td>
+                        <td>42, #FF</td>
+                        <td>Decimal or hexadecimal notation</td>
+                    </tr>
+                    <tr>
+                        <td>real</td>
+                        <td>3.14, 2.5e-3</td>
+                        <td>Floating-point with scientific notation</td>
+                    </tr>
+                    <tr>
+                        <td>character</td>
+                        <td>'A', '\n'</td>
+                        <td>Single character with escape sequences</td>
+                    </tr>
+                    <tr>
+                        <td>list of &lt;type&gt;</td>
+                        <td>(1, 2, 3)</td>
+                        <td>Homogeneous lists of any base type</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Operator Precedence</h3>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Operators</th>
+                        <th>Associativity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>~, !</td>
+                        <td>Right</td>
+                        <td>Unary negation, logical NOT</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>^</td>
+                        <td>Right</td>
+                        <td>Exponentiation</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>*, /, %</td>
+                        <td>Left</td>
+                        <td>Multiplication, division, remainder</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>+, -</td>
+                        <td>Left</td>
+                        <td>Addition, subtraction</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>&lt;, &gt;, =, &lt;=, &gt;=, &lt;&gt;</td>
+                        <td>Non-assoc</td>
+                        <td>Relational operators</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>&</td>
+                        <td>Left</td>
+                        <td>Logical AND</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>|</td>
+                        <td>Left</td>
+                        <td>Logical OR</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Code Examples -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Code Examples</h2>
+
+            <div class="code-section">
+                <div class="code-header">
+                    <h3 class="code-title">Factorial Using Fold</h3>
+                    <span class="code-label">Functional</span>
+                </div>
+                <div class="code-block">
+<span class="code-keyword">function</span> factorial n: <span class="code-keyword">integer</span> <span class="code-keyword">returns</span> <span class="code-keyword">integer</span>;
+<span class="code-keyword">begin</span>
+    <span class="code-keyword">fold left</span> * (<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>) <span class="code-keyword">endfold</span>;
+<span class="code-keyword">end</span>;
+
+<span class="code-comment">// Output: Result = 120</span>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <div class="code-header">
+                    <h3 class="code-title">Temperature Conversion</h3>
+                    <span class="code-label">Arithmetic</span>
+                </div>
+                <div class="code-block">
+<span class="code-keyword">function</span> celsius_to_fahrenheit c: <span class="code-keyword">real</span> <span class="code-keyword">returns</span> <span class="code-keyword">real</span>;
+<span class="code-keyword">begin</span>
+    c * <span class="code-number">9.0</span> / <span class="code-number">5.0</span> + <span class="code-number">32.0</span>;
+<span class="code-keyword">end</span>;
+
+<span class="code-comment">// Usage: ./compile < temp.txt 100.0</span>
+<span class="code-comment">// Output: Result = 212</span>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <div class="code-header">
+                    <h3 class="code-title">List Operations</h3>
+                    <span class="code-label">Lists</span>
+                </div>
+                <div class="code-block">
+<span class="code-keyword">function</span> sum_of_squares <span class="code-keyword">returns</span> <span class="code-keyword">integer</span>;
+    nums: <span class="code-keyword">list of integer</span> <span class="code-keyword">is</span> (<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>);
+<span class="code-keyword">begin</span>
+    <span class="code-keyword">fold left</span> + nums <span class="code-keyword">endfold</span>;
+<span class="code-keyword">end</span>;
+
+<span class="code-comment">// Output: Result = 15</span>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <div class="code-header">
+                    <h3 class="code-title">Conditional Logic</h3>
+                    <span class="code-label">Control Flow</span>
+                </div>
+                <div class="code-block">
+<span class="code-keyword">function</span> grade_letter score: <span class="code-keyword">integer</span> <span class="code-keyword">returns</span> <span class="code-keyword">integer</span>;
+<span class="code-keyword">begin</span>
+    <span class="code-keyword">if</span> score >= <span class="code-number">90</span> <span class="code-keyword">then</span>
+        <span class="code-number">65</span>; <span class="code-comment">// 'A'</span>
+    <span class="code-keyword">elsif</span> score >= <span class="code-number">80</span> <span class="code-keyword">then</span>
+        <span class="code-number">66</span>; <span class="code-comment">// 'B'</span>
+    <span class="code-keyword">elsif</span> score >= <span class="code-number">70</span> <span class="code-keyword">then</span>
+        <span class="code-number">67</span>; <span class="code-comment">// 'C'</span>
+    <span class="code-keyword">else</span>
+        <span class="code-number">70</span>; <span class="code-comment">// 'F'</span>
+    <span class="code-keyword">endif</span>;
+<span class="code-keyword">end</span>;
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compilation Modes -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Compilation Modes</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Full Mode (Default)</h3>
+                    <p class="feature-description">Complete compilation with type checking and interpretation</p>
+                    <div class="code-block" style="margin-top: 1rem; font-size: 0.85rem;">./compile < program.txt</div>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Type-Check Only</h3>
+                    <p class="feature-description">Validates syntax and semantics without execution</p>
+                    <div class="code-block" style="margin-top: 1rem; font-size: 0.85rem;">./compile --type-check < program.txt</div>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Interpret Only</h3>
+                    <p class="feature-description">Skips type checking for faster execution of known-valid programs</p>
+                    <div class="code-block" style="margin-top: 1rem; font-size: 0.85rem;">./compile --interpret < program.txt</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Error Detection -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Comprehensive Error Detection</h2>
+            
+            <div class="section-content">
+                <p>The compiler performs thorough validation at every phase, catching errors early and providing clear feedback:</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Lexical Errors</h3>
+                    <ul class="feature-list">
+                        <li>Invalid characters</li>
+                        <li>Malformed literals</li>
+                        <li>Unterminated strings</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Syntax Errors</h3>
+                    <ul class="feature-list">
+                        <li>Missing semicolons</li>
+                        <li>Unbalanced parentheses</li>
+                        <li>Grammar violations</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">Semantic Errors</h3>
+                    <ul class="feature-list">
+                        <li>Type narrowing detection</li>
+                        <li>Undeclared variables</li>
+                        <li>Duplicate identifiers</li>
+                        <li>Type mismatches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Known Limitations & Future Work -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Status & Future Enhancements</h2>
+            
+            <div class="section-content">
+                <p><span class="status-badge status-success">✓ Stable</span> The compiler is fully functional with comprehensive features for educational and experimental use.</p>
+            </div>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Known Limitations</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Switch Statement Fallthrough</h3>
+                    <p class="feature-description">Cases currently fall through to 'others' clause. Workaround: use if/elsif chains</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">No Function Calls</h3>
+                    <p class="feature-description">Functions can be defined but not called within the language. Single-function programs only</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="feature-title">No I/O Operations</h3>
+                    <p class="feature-description">Programs use command-line parameters for input and print final result only</p>
+                </div>
+            </div>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Planned Enhancements</h3>
+            <div class="section-content">
+                <ul class="feature-list">
+                    <li>Fix switch statement case matching behavior</li>
+                    <li>Add string type with operations (concatenation, length, substring)</li>
+                    <li>Implement function call expressions with recursion support</li>
+                    <li>Add for/while loop constructs</li>
+                    <li>Enhanced error messages with precise line and column numbers</li>
+                    <li>More list operations (length, append, head, tail, map, filter)</li>
+                    <li>User-defined types (structs/records)</li>
+                    <li>Comprehensive test suite with automated testing</li>
+                    <li>Generate intermediate representation (3-address code)</li>
+                    <li>Compile to assembly or LLVM IR for native execution</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Performance Characteristics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Lexical Analysis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Parsing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">O(n)</div>
+                    <div class="stat-label">Type Checking</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">&lt;100ms</div>
+                    <div class="stat-label">Typical Compilation</div>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <p>The compiler achieves linear time complexity for most operations, with excellent performance on typical programs under 1000 lines. Memory usage scales linearly with program size and list element count.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Building & Testing -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Building & Testing</h2>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Requirements</h3>
+            <div class="tech-stack">
+                <div class="tech-badge">Flex 2.6+</div>
+                <div class="tech-badge">Bison 3.0+</div>
+                <div class="tech-badge">G++ (C++11)</div>
+                <div class="tech-badge">Make</div>
+            </div>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Build Process</h3>
+            <div class="code-section">
+                <div class="code-block">
+<span class="code-comment"># Clone the repository</span>
+git clone https://github.com/Apillicus/LanguageCompiler.git
+cd LanguageCompiler
+
+<span class="code-comment"># Build the compiler</span>
+make
+
+<span class="code-comment"># Run a simple test</span>
+echo <span class="code-string">"function main returns integer; begin 2 + 3 * 4; end;"</span> | ./compile
+
+<span class="code-comment"># Expected output: Result = 14</span>
+                </div>
+            </div>
+
+            <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">Example Test Cases</h3>
+            <div class="code-section">
+                <div class="code-block">
+<span class="code-comment"># Test hexadecimal literals</span>
+echo <span class="code-string">"function main returns integer; begin #FF; end;"</span> | ./compile
+<span class="code-comment"># Expected: Result = 255</span>
+
+<span class="code-comment"># Test type checking (should fail)</span>
+echo <span class="code-string">"function main returns integer; begin 4.5; end;"</span> | ./compile
+<span class="code-comment"># Expected: Semantic Error, Illegal Narrowing Function Return</span>
+
+<span class="code-comment"># Test list operations</span>
+echo <span class="code-string">"function main returns integer; 
+      nums: list of integer is (1,2,3,4); 
+      begin fold left + nums endfold; end;"</span> | ./compile
+<span class="code-comment"># Expected: Result = 10</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Structure -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Project Structure</h2>
+            
+            <div class="code-section">
+                <div class="code-block">
+LanguageCompiler/
+├── scanner.l        <span class="code-comment"># Flex lexical analyzer specification</span>
+├── parser.y         <span class="code-comment"># Bison parser with semantic actions</span>
+├── types.h          <span class="code-comment"># Type system and function declarations</span>
+├── types.cc         <span class="code-comment"># Type checking and interpretation</span>
+├── symbols.h        <span class="code-comment"># Template-based symbol table</span>
+├── listing.h        <span class="code-comment"># Error reporting interface</span>
+├── listing.cc       <span class="code-comment"># Error reporting implementation</span>
+├── makefile         <span class="code-comment"># Build automation</span>
+└── README.md        <span class="code-comment"># Comprehensive documentation</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lessons Learned -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-header">Key Takeaways</h2>
+            
+            <div class="section-content">
+                <p>This project provided deep insights into compiler construction and language design:</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Compiler Theory in Practice</h3>
+                    <p class="feature-description">Hands-on experience implementing theoretical concepts from lexical analysis to code execution</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Type System Design</h3>
+                    <p class="feature-description">Understanding type coercion, narrowing detection, and the challenges of static type checking</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3 class="feature-title">Error Handling</h3>
+                    <p class="feature-description">Implementing comprehensive error detection at multiple compilation phases</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏗️</div>
+                    <h3 class="feature-title">Software Architecture</h3>
+                    <p class="feature-description">Building modular, maintainable code with clear separation of concerns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="content-section">
+        <div class="container">
+            <div style="text-align: center; padding: 3rem 0;">
+                <h2 class="section-header">Explore the Code</h2>
+                <p class="section-content" style="max-width: 600px; margin: 0 auto 2rem;">
+                    Check out the full source code, detailed documentation, and example programs on GitHub. Contributions and feedback are welcome!
+                </p>
+                <div class="project-links">
+                    <a href="https://github.com/Apillicus/LanguageCompiler" target="_blank" class="btn btn-primary">View Repository</a>
+                    <a href="../../index.html#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Christopher Thompson. Built with passion for compiler design.</p>
+            <p style="margin-top: 0.5rem;"><a href="../../index.html" style="color: var(--accent); text-decoration: none;">← Back to Portfolio</a></p>
+        </div>
+    </footer>
+</body>
+</html><!DOCTYPE html>
